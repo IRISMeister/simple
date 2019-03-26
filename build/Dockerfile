@@ -9,8 +9,9 @@ RUN mkdir -p $ISC_TEMP_DIR \
  && echo abc123 > pwd.txt \
  && $ISC_PACKAGE_INSTALLDIR/dev/Cloud/ICM/changePassword.sh $ISC_TEMP_DIR/pwd.txt \
  && iris start iris  && \printf '_SYSTEM\nabc123\ndo $system.OBJ.Load("/tmp/isc/MyApps/Installer.cls","ck")\ndo ##class(MyApps.Installer).setup()\nhalt\n' | iris session iris \
- && printf "%s\n%s\n%s\n%s\n%s\n%s\n" "_SYSTEM" "abc123" "zn \"%SYS\"" "do INT^JRNSTOP" "kill ^%SYS(\"JOURNAL\") kill ^SYS(\"NODE\") Halt" | iris session iris \
  && iris stop iris quietly \
+ && iris start iris nostu quietly \
+ && printf "kill ^%%SYS(\"JOURNAL\") kill ^SYS(\"NODE\") Do INT^SHUTDOWN" | irissession IRIS -B | cat \
  && rm -f pwd.txt.done \
  && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/journal.log \
  && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/IRIS.WIJ \
