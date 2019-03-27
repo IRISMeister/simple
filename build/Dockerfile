@@ -1,4 +1,4 @@
-FROM intersystems/iris:2019.1.0.510.0-community 
+FROM store/intersystems/iris:2019.1.0.510.0-community 
 
 ENV ISC_TEMP_DIR=/tmp/isc
 COPY simple-atelier-prj/ $ISC_TEMP_DIR/
