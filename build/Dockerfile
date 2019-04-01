@@ -8,7 +8,7 @@ RUN mkdir -p $ISC_TEMP_DIR \
  && cd $ISC_TEMP_DIR \
  && iris start iris EmergencyID=1,1 \ 
  && printf '1\n1\n \
- do $system.OBJ.Load("/tmp/isc/MyApps/Installer.cls","ck")\n \
+ zn "USER"\ndo $system.OBJ.Load("/tmp/isc/MyApps/Installer.cls","ck")\n \
  do ##class(MyApps.Installer).setup()\n \
  halt\n' | iris session iris \
  && printf '1\n1\n' | iris stop iris quietly \
