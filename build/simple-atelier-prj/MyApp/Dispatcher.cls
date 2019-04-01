@@ -13,7 +13,7 @@ XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 ClassMethod Test() As %Status
 {
 	
-	#; curl -H "Content-Type: application/json; charset=UTF-8" -H "Accept:application/json" "http://localhost:52773/csp/myapp/test" --user "SuperUser:ISC-Japan"
+	#; curl -H "Content-Type: application/json; charset=UTF-8" -H "Accept:application/json" "http://localhost:52773/csp/myapp/test" --user "SuperUser:sys"
 	s ret={"Host":($SYSTEM.INetInfo.LocalHostName()),"User":($USERNAME),"Status":"OK","TimeStamp":($ZDATETIME($H))}
 	w ret.%ToJSON(),!
     return $$$OK
