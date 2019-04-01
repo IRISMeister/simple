@@ -1,6 +1,4 @@
-# cd build
 # ./build.sh
-# cd ..
 # ./run.sh
 #
 # Test
