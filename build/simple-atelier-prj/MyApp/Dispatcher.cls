@@ -15,7 +15,7 @@ ClassMethod Test() As %Status
 {
 	
 	#; curl -H "Content-Type: application/json; charset=UTF-8" -H "Accept:application/json" "http://localhost:52773/csp/myapp/test" --user "SuperUser:sys"
-	s ret={"HostName":($SYSTEM.INetInfo.LocalHostName()),"User":($USERNAME),"Status":"OK","TimeStamp":($ZDATETIME($H))}
+	set ret={"MyHostName":($SYSTEM.INetInfo.LocalHostName()),"User":($USERNAME),"Status":"OK","TimeStamp":($ZDATETIME($H))}
 	Set ^log($INCREMENT(^log))=ret.TimeStamp
 	w ret.%ToJSON(),!
     return $$$OK
@@ -33,4 +33,3 @@ ClassMethod Get() As %Status
 }
 
 }
-
