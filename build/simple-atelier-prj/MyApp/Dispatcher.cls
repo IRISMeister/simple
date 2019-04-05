@@ -13,23 +13,27 @@ XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 
 ClassMethod Test() As %Status
 {
-	
-	#; curl -H "Content-Type: application/json; charset=UTF-8" -H "Accept:application/json" "http://localhost:52773/csp/myapp/test" --user "SuperUser:sys"
-	set ret={"MyHostName":($SYSTEM.INetInfo.LocalHostName()),"User":($USERNAME),"Status":"OK","TimeStamp":($ZDATETIME($H))}
+	#; curl -H "Content-Type: application/json; charset=UTF-8" -H "Accept:application/json" "http://localhost:52773/csp/myapp/test" --user "user:pass"
+
+	Set %response.ContentType="application/json"
+	Set %response.CharSet=%request.CharSet
+	Set ret={"MyHostName":($SYSTEM.INetInfo.LocalHostName()),"User":($USERNAME),"Status":"OK","TimeStamp":($ZDATETIME($H))}
 	Set ^log($INCREMENT(^log))=ret.TimeStamp
-	w ret.%ToJSON(),!
-    return $$$OK
+	Do ret.%ToJSON() W !
+    Return $$$OK
 }
 
 ClassMethod Get() As %Status
 {
+	Set %response.ContentType="application/json"
+	Set %response.CharSet=%request.CharSet
 	
 	Set c="" For { 
 		Set c=$O(^log(c)) q:c=""
-		s ret={"TimeStamp":(^log(c))}
-		w ret.%ToJSON(),!
+		Set ret={"TimeStamp":(^log(c))}
+		Do ret.%ToJSON() W !
 	}
-    return $$$OK
+    Return $$$OK
 }
 
 }
