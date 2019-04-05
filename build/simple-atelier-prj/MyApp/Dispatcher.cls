@@ -20,7 +20,7 @@ ClassMethod Test() As %Status
 	Set ret={"MyHostName":($SYSTEM.INetInfo.LocalHostName()),"User":($USERNAME),"Status":"OK","TimeStamp":($ZDATETIME($H))}
 	Set ^log($INCREMENT(^log))=ret.TimeStamp
 	Do ret.%ToJSON() W !
-    Return $$$OK
+	Return $$$OK
 }
 
 ClassMethod Get() As %Status
@@ -34,7 +34,7 @@ ClassMethod Get() As %Status
 		Do ret.%Push({"TimeStamp":(^log(c))})
 		Do ret.%ToJSON() W !
 	}
-    Return $$$OK
+	Return $$$OK
 }
 
 }
