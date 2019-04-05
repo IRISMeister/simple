@@ -27,10 +27,11 @@ ClassMethod Get() As %Status
 {
 	Set %response.ContentType="application/json"
 	Set %response.CharSet=%request.CharSet
+	Set ret=[]
 	
 	Set c="" For { 
 		Set c=$O(^log(c)) q:c=""
-		Set ret={"TimeStamp":(^log(c))}
+		Do ret.%Push({"TimeStamp":(^log(c))})
 		Do ret.%ToJSON() W !
 	}
     Return $$$OK
