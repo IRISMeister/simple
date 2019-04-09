@@ -9,6 +9,7 @@ RUN cd $ISC_TEMP_DIR \
  && printf '1\n1\n \
  zn "USER" Do $system.OBJ.Load("/tmp/isc/MyApps/Installer.cls","ck") \
  do ##class(MyApps.Installer).setup() \
+ zn "MYAPP" do $system.OBJ.ImportDir("/tmp/isc/MyApps/",,"ck",,1) \
  zn "%%SYS" Do INT^SHUTDOWN\n' | iris session iris | cat \
  && iris start iris nostu quietly \
  && printf "kill ^%%SYS(\"JOURNAL\") kill ^SYS(\"NODE\") Do INT^SHUTDOWN" | irissession IRIS -B | cat \
