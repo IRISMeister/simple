@@ -13,4 +13,3 @@ ClassMethod Init(webapp = "") As %Status
 }
 
 }
-

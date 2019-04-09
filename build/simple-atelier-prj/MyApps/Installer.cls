@@ -38,4 +38,3 @@ ClassMethod setup(ByRef pVars, pLogLevel As %Integer = 3, pInstaller As %Install
 }
 
 }
-
