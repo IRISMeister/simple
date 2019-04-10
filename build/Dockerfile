@@ -1,5 +1,7 @@
 FROM store/intersystems/iris:2019.1.0.510.0-community 
 
+ARG COMMIT_ID="unknown"
+
 ENV ISC_TEMP_DIR=/tmp/isc
 COPY simple-atelier-prj/ $ISC_TEMP_DIR/
 
@@ -19,7 +21,8 @@ RUN cd $ISC_TEMP_DIR \
  && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/alerts.log \
  && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/journal/* \
  && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/messages.log \
- && rm -rf $ISC_TEMP_DIR
+ && rm -rf $ISC_TEMP_DIR \
+ && echo $COMMIT_ID > /commit.txt
 
 WORKDIR /
 
