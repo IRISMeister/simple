@@ -2,5 +2,6 @@
 # ./build.sh
 #Run
 # ./run.sh
-#Test
-# /test.sh
+#Execute
+# ./exec.sh
+# ./exec2.sh
