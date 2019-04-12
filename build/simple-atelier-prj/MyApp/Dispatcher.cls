@@ -6,12 +6,12 @@ Parameter CONVERTINPUTSTREAM = 1;
 XData UrlMap [ XMLNamespace = "http://www.intersystems.com/urlmap" ]
 {
 <Routes>
-<Route Url="/test" Method="GET" Call="Test"/>
 <Route Url="/get" Method="GET" Call="Get"/>
+<Route Url="/history" Method="GET" Call="History"/>
 </Routes>
 }
 
-ClassMethod Test() As %Status
+ClassMethod Get() As %Status
 {
 	#; curl -H "Content-Type: application/json; charset=UTF-8" -H "Accept:application/json" "http://localhost:52773/csp/myapp/test" --user "user:pass"
 
@@ -23,7 +23,7 @@ ClassMethod Test() As %Status
 	Return $$$OK
 }
 
-ClassMethod Get() As %Status
+ClassMethod History() As %Status
 {
 	Set %response.ContentType="application/json"
 	Set %response.CharSet=%request.CharSet
@@ -32,8 +32,8 @@ ClassMethod Get() As %Status
 	Set c="" For { 
 		Set c=$O(^log(c)) q:c=""
 		Do ret.%Push({"TimeStamp":(^log(c))})
-		Do ret.%ToJSON() W !
 	}
+	Do ret.%ToJSON() W !
 	Return $$$OK
 }
 
