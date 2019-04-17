@@ -17,7 +17,7 @@ ClassMethod Get() As %Status
 
 	Set %response.ContentType="application/json"
 	Set %response.CharSet=%request.CharSet
-	Set ret={"Summit2019HostName":($SYSTEM.INetInfo.LocalHostName()),"UserName":($USERNAME),"Status":"OK","TimeStamp":($ZDATETIME($H))}
+	Set ret={"HostName":($SYSTEM.INetInfo.LocalHostName()),"UserName":($USERNAME),"Status":"OK","TimeStamp":($ZDATETIME($H))}
 	Set ^log($INCREMENT(^log))=ret.TimeStamp
 	Do ret.%ToJSON() W !
 	Return $$$OK
