@@ -17,7 +17,7 @@ ClassMethod Get() As %Status
 
 	Set %response.ContentType="application/json"
 	Set %response.CharSet=%request.CharSet
-	Set ret={"HostName":($SYSTEM.INetInfo.LocalHostName()),"UserName":($USERNAME),"Status":"OK","TimeStamp":($ZDATETIME($H))}
+	Set ret={"Summit2019HostName":($SYSTEM.INetInfo.LocalHostName()),"UserName":($USERNAME),"Status":"OK","TimeStamp":($ZDATETIME($H))}
 	Set ^log($INCREMENT(^log))=ret.TimeStamp
 	Do ret.%ToJSON() W !
 	Return $$$OK
@@ -28,8 +28,8 @@ ClassMethod History() As %Status
 	Set %response.ContentType="application/json"
 	Set %response.CharSet=%request.CharSet
 	Set ret=[]
-	
-	Set c="" For { 
+
+	Set c="" For {
 		Set c=$O(^log(c)) q:c=""
 		Do ret.%Push({"TimeStamp":(^log(c))})
 	}
