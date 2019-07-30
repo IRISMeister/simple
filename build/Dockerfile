@@ -2,6 +2,13 @@ FROM store/intersystems/iris:2019.1.0.511.0-community
 
 ARG COMMIT_ID="unknown"
 
+ENV DEBIAN_FRONTEND noninteractive
+# leave tzdata package to allow choosing arbitary timezone, later
+RUN apt-get update && apt-get install -y tzdata
+
+# IRIS itself doesn't require ja language pack
+#RUN apt-get install -y language-pack-ja && update-locale LANG=ja_JP.UTF-8
+
 ENV ISC_TEMP_DIR=/tmp/isc
 COPY simple-atelier-prj/ $ISC_TEMP_DIR/
 
