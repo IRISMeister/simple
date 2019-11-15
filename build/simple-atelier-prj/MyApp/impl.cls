@@ -11,8 +11,8 @@ Parameter ExposeServerExceptions = 0;
 ClassMethod Get() As %Stream.Object
 {
     Do ..%SetHeader("Content-Type","application/json")
-
-	Set ret={"HostName":($SYSTEM.INetInfo.LocalHostName()),"UserName":($USERNAME),"Status":"OK","TimeStamp":($ZDATETIME($H))}
+    set imageBuilt=$G(^ImageBuildDate)
+	Set ret={"HostName":($SYSTEM.INetInfo.LocalHostName()),"UserName":($USERNAME),"Status":"OK","TimeStamp":($ZDATETIME($H)),"ImageBuilt":(imageBuilt)}
 	Set ^log($INCREMENT(^log))=ret.TimeStamp
     Quit ret
 }

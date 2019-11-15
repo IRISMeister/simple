@@ -7,4 +7,5 @@
 # ./app-call2.sh
 
 If you want to generate skeleton classes from a given openapi spec, do the following.   
+Please make sure you have at least one IRIS user (such as SuperUser) enabled.
 #curl -H 'Content-Type: application/json' -d @swagger.json -u SuperUser:password http://localhost:52773/api/mgmnt/v2/myapp/myapp

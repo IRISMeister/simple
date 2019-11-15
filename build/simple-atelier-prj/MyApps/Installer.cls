@@ -99,6 +99,9 @@ ClassMethod externalize() As %Status
     Set db.Directory=dbpath
     Set status=db.%Save()
 
+    #; what should I do if I want to copy app data built while image build process into this new database...
+    #; For example, ^ImageBuildDate global exists in MYAPP-DATA-I.
+
     Set Properties("Directory")=dbpath
     Set Status=##Class(Config.Databases).Create(dbname,.Properties)
     Set tSC=##Class(Config.Namespaces).Get("myapp",.Properties)

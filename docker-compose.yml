@@ -1,4 +1,4 @@
-version: '3.2'
+version: '3.7'
 #
 services:
   irissvc:
@@ -7,6 +7,7 @@ services:
       args:
         COMMIT_ID: ${COMMIT_ID}
     image: dpmeister/irisdemo:simple
+    init: true
     hostname: myiris
 
     ports:
