@@ -17,11 +17,10 @@ XData setup [ XMLNamespace = INSTALLER ]
       <Database Name="${DATADB}" Dir="${DBDIR}${DATADB}" Create="overwrite" Resource="%DB_${DATADB}"/>
     </Configuration>
 
-  <CSPApplication Url="/csp/${Namespace}" Directory="${CSPDIR}${Namespace}" Resource=""/>
-  <Import File="${SRCDIR}" Flags="ck" Recurse="true"/>
-  <Invoke Class="MyApp.Utils" Method="Init" CheckStatus="1" Return="RetVal">
-	<Arg Value="/csp/${Namespace}"/>
-  </Invoke>
+    <CSPApplication Url="/csp/${Namespace}" Directory="${CSPDIR}${Namespace}" Resource=""/>
+    <Import File="${SRCDIR}" Flags="ck" Recurse="true"/>
+    <Invoke Class="myapp.Utils" Method="Init" CheckStatus="1" Return="RetVal">
+    </Invoke>
   </Namespace>
 
   <!-- durable sys makes original(inside container image) user namespace/database inaccesible -->
@@ -30,13 +29,9 @@ XData setup [ XMLNamespace = INSTALLER ]
       <Database Name="USERI" Dir="${MGRDIR}/user/" Create="no" MountRequired="0" Resource="%DB_USER" />
     </Configuration>
 
-  <CSPApplication Url="/csp/${Namespace}" Directory="${CSPDIR}${Namespace}" Resource=""/>
-  <Import File="${SRCDIR}" Flags="ck" Recurse="true"/>
-  <Invoke Class="MyApp.Utils" Method="Init" CheckStatus="1" Return="RetVal">
-	<Arg Value="/csp/${Namespace}"/>
-  </Invoke>
+    <CSPApplication Url="/csp/${Namespace}" Directory="${CSPDIR}${Namespace}" Resource=""/>
+    <Import File="${SRCDIR}" Flags="ck" Recurse="true"/>
   </Namespace>
-
 
   <Log Text="End Creating namespace ${Namespace}" Level="0"/>
 </If>
@@ -58,7 +53,7 @@ ClassMethod setup(ByRef tVars) As %Status
 
     If '$D(tVars("Namespace")) { Set tVars("Namespace")=Namespace }
     If '$D(tVars("appuserpwd")) { Set tVars("appuserpwd")="sys" }
-    If '$D(tVars("SRCDIR")) { Set tVars("SRCDIR")="/home/irisowner/src/MyApp/" }
+    If '$D(tVars("SRCDIR")) { Set tVars("SRCDIR")="/home/irisowner/src/myapp/" }
     #; create app db in other place than MGRDIR so that
     #; you can change R/W depending on whether you are in dev/test/prod environment
     #; Is this really a good idea??
@@ -72,7 +67,7 @@ ClassMethod setup(ByRef tVars) As %Status
     Set $NAMESPACE="%SYS"
 
     Set tSC = ##Class(Security.Applications).Get(webapp,.props)
-    Set props("DispatchClass")="MyApp.Dispatcher"
+    Set props("DispatchClass")="myapp.disp"
     Set props("Resource")=""
     Set props("DeepSeeEnabled")=1
     Set props("MatchRoles")=":%All"

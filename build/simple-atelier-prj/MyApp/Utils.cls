@@ -1,4 +1,4 @@
-Class MyApp.Utils [ Abstract ]
+Class myapp.Utils [ Abstract ]
 {
 
 /// App level initialization if any
