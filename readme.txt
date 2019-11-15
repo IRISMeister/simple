@@ -3,6 +3,6 @@
 #Run
 # ./run.sh
 #Execute
-# ./exec.sh
-# ./exec2.sh
-#
+# ./app-call1.sh
+# ./app-call2.sh
+
