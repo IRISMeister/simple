@@ -5,7 +5,11 @@
 #Execute
 # ./app-call1.sh
 # ./app-call2.sh
+#Stop
+# ./docker-compose stop
+#Remove
+# ./docker-compose down -v
 
-If you want to generate skeleton classes from a given openapi spec, do the following.   
+(non commnunity version only) If you want to generate skeleton classes from a given openapi spec, do the following.   
 Please make sure you have at least one IRIS user (such as SuperUser) enabled.
 #curl -H 'Content-Type: application/json' -d @swagger.json -u SuperUser:password http://localhost:52773/api/mgmnt/v2/myapp/myapp
