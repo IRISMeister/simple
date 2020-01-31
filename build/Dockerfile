@@ -22,6 +22,7 @@ RUN  iris start $ISC_PACKAGE_INSTANCENAME \
  && iris stop $ISC_PACKAGE_INSTANCENAME quietly
 
 #++ until imageBuildSteps.sh is chnaged++
+# imageBuildSteps makes appuser 'ForceChangePassword' state....
 RUN iris start $ISC_PACKAGE_INSTANCENAME nostu quietly \
  && printf "kill ^%%SYS(\"JOURNAL\") kill ^SYS(\"NODE\") h\n" | iris session $ISC_PACKAGE_INSTANCENAME -B | cat \
  && iris stop $ISC_PACKAGE_INSTANCENAME quietly bypass \
@@ -34,7 +35,6 @@ RUN iris start $ISC_PACKAGE_INSTANCENAME nostu quietly \
 #-- until imageBuildSteps.sh is chnaged--
 
 USER root
-# imageBuildSteps makes appuser 'ForceChangePassword' state....
 #RUN /usr/irissys/dev/Container/imageBuildSteps.sh
 
 # cpf merger is not yet ready.
