@@ -4,8 +4,8 @@ Class MyApps.Installer
 XData setup [ XMLNamespace = INSTALLER ]
 {
 <Manifest>
-<Var Name="DATADB" Value="${DB}-DATA-I"/>
-<Var Name="CODEDB" Value="${DB}-CODE-I"/>
+<Var Name="DATADB" Value="${DB}-DATA"/>
+<Var Name="CODEDB" Value="${DB}"/>
 
 <User Username="appuser" PasswordVar="appuserpwd" Roles="" Namespace="" Routine="" ExpirationDate="" Enabled="1" Comment="appilication user"/>
 
@@ -13,7 +13,7 @@ XData setup [ XMLNamespace = INSTALLER ]
   <Log Text="Creating namespace ${Namespace}" Level="0"/>
   <Namespace Name="${Namespace}" Create="yes" Code="${CODEDB}" Ensemble="0" Data="${DATADB}">
     <Configuration>
-      <Database Name="${CODEDB}" Dir="${DBDIR}${CODEDB}" Create="overwrite" Resource="%DB_${CODEDB}"/>
+      <Database Name="${CODEDB}" Dir="${MGRDIR}${CODEDB}" Create="overwrite" Resource="%DB_${CODEDB}"/>
       <Database Name="${DATADB}" Dir="${DBDIR}${DATADB}" Create="overwrite" Resource="%DB_${DATADB}"/>
     </Configuration>
 
@@ -21,16 +21,6 @@ XData setup [ XMLNamespace = INSTALLER ]
     <Import File="${SRCDIR}" Flags="ck" Recurse="true"/>
     <Invoke Class="myapp.Utils" Method="Init" CheckStatus="1" Return="RetVal">
     </Invoke>
-  </Namespace>
-
-  <!-- durable sys makes original(inside container image) user namespace/database inaccesible -->
-  <Namespace Name="USERI" Create="yes" Code="USERI" Ensemble="0" Data="USERI">
-    <Configuration>
-      <Database Name="USERI" Dir="${MGRDIR}/user/" Create="no" MountRequired="0" Resource="%DB_USER" />
-    </Configuration>
-
-    <CSPApplication Url="/csp/${Namespace}" Directory="${CSPDIR}${Namespace}" Resource=""/>
-    <Import File="${SRCDIR}" Flags="ck" Recurse="true"/>
   </Namespace>
 
   <Log Text="End Creating namespace ${Namespace}" Level="0"/>
@@ -54,19 +44,18 @@ ClassMethod setup(ByRef tVars) As %Status
     If '$D(tVars("Namespace")) { Set tVars("Namespace")=Namespace }
     If '$D(tVars("appuserpwd")) { Set tVars("appuserpwd")="sys" }
     If '$D(tVars("SRCDIR")) { Set tVars("SRCDIR")="/home/irisowner/src/myapp/" }
-    #; create app db in other place than MGRDIR so that
-    #; you can change R/W depending on whether you are in dev/test/prod environment
-    #; Is this really a good idea??
+    #; create app db in other place than MGRDIR so that you have R/W access to it.
     If '$D(tVars("DB")) { Set tVars("DB")=Namespace }
     If '$D(tVars("DBDIR")) { Set tVars("DBDIR")="/home/irisowner/db/" }
     Set tSC=..setupMethod(.tVars)
-    If $$$ISERR(tSC) { Return tSC}
+    $$$ThrowOnError(tSC)
 
     Set oldns=$NAMESPACE
-    New $NAMESPACE   ; just in case
+    New $NAMESPACE
     Set $NAMESPACE="%SYS"
 
     Set tSC = ##Class(Security.Applications).Get(webapp,.props)
+    $$$ThrowOnError(tSC)
     Set props("DispatchClass")="myapp.disp"
     Set props("Resource")=""
     Set props("DeepSeeEnabled")=1
@@ -74,6 +63,7 @@ ClassMethod setup(ByRef tVars) As %Status
     Set props("NameSpace")=Namespace
     Kill props("Type")
     Set tSC = ##Class(Security.Applications).Modify(webapp,.props)
+    $$$ThrowOnError(tSC)
 
     Set $NAMESPACE=oldns
 
@@ -97,16 +87,14 @@ ClassMethod externalize() As %Status
     Set dbpath="/vol-data/myapp-data"
     Set db=##Class(SYS.Database).%New()
     Set db.Directory=dbpath
-    Set status=db.%Save()
+    Set tSC=db.%Save()
+    $$$ThrowOnError(tSC)
 
-    #; what should I do if I want to copy app data built while image build process into this new database...
-    #; For example, ^ImageBuildDate global exists in MYAPP-DATA-I.
-
+    Set tSC=##Class(Config.Databases).Get(dbname,.Properties)
+    $$$ThrowOnError(tSC)
     Set Properties("Directory")=dbpath
-    Set Status=##Class(Config.Databases).Create(dbname,.Properties)
-    Set tSC=##Class(Config.Namespaces).Get("myapp",.Properties)
-    Set Properties("Globals")=dbname
-    Set tSC=##Class(Config.Namespaces).Modify("myapp",.Properties)
+    Set tSC=##Class(Config.Databases).Modify(dbname,.Properties)
+    $$$ThrowOnError(tSC)
 
 	  Set $NAMESPACE=oldns
   } Catch(e) {
