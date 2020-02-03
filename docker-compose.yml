@@ -6,7 +6,7 @@ services:
       context: ./build
       args:
         COMMIT_ID: ${COMMIT_ID}
-    image: dpmeister/irisdemo:simple
+    image: dpmeister/simple
     init: true
     hostname: myiris
 

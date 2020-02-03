@@ -43,7 +43,7 @@ ClassMethod setup(ByRef tVars) As %Status
 
     If '$D(tVars("Namespace")) { Set tVars("Namespace")=Namespace }
     If '$D(tVars("appuserpwd")) { Set tVars("appuserpwd")="sys" }
-    If '$D(tVars("SRCDIR")) { Set tVars("SRCDIR")="/home/irisowner/src/myapp/" }
+    If '$D(tVars("SRCDIR")) { Set tVars("SRCDIR")="/home/irisowner/src/MyApp/" }
     #; create app db in other place than MGRDIR so that you have R/W access to it.
     If '$D(tVars("DB")) { Set tVars("DB")=Namespace }
     If '$D(tVars("DBDIR")) { Set tVars("DBDIR")="/home/irisowner/db/" }
