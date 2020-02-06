@@ -23,6 +23,7 @@ services:
 
     environment:
     - TZ=JST-9
+    #; comment out this line to enable durable sys
     - ISC_DATA_DIRECTORY=/iris-mgr/IRIS_conf.d
 
 volumes:

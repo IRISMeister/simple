@@ -5,7 +5,7 @@ XData setup [ XMLNamespace = INSTALLER ]
 {
 <Manifest>
 <Var Name="DATADB" Value="${DB}-DATA"/>
-<Var Name="CODEDB" Value="${DB}"/>
+<Var Name="CODEDB" Value="${DB}-CODE"/>
 
 <User Username="appuser" PasswordVar="appuserpwd" Roles="" Namespace="" Routine="" ExpirationDate="" Enabled="1" Comment="appilication user"/>
 
@@ -13,8 +13,8 @@ XData setup [ XMLNamespace = INSTALLER ]
   <Log Text="Creating namespace ${Namespace}" Level="0"/>
   <Namespace Name="${Namespace}" Create="yes" Code="${CODEDB}" Ensemble="0" Data="${DATADB}">
     <Configuration>
-      <Database Name="${CODEDB}" Dir="${MGRDIR}${CODEDB}" Create="overwrite" Resource="%DB_${CODEDB}"/>
-      <Database Name="${DATADB}" Dir="${DBDIR}${DATADB}" Create="overwrite" Resource="%DB_${DATADB}"/>
+      <Database Name="${CODEDB}" Dir="${CODEDIR}${CODEDB}" Create="yes" Resource="%DB_${CODEDB}"/>
+      <Database Name="${DATADB}" Dir="${DBDIR}${DATADB}" Create="yes" Resource="%DB_${DATADB}"/>
     </Configuration>
 
     <CSPApplication Url="/csp/${Namespace}" Directory="${CSPDIR}${Namespace}" Resource=""/>
@@ -44,9 +44,11 @@ ClassMethod setup(ByRef tVars) As %Status
     If '$D(tVars("Namespace")) { Set tVars("Namespace")=Namespace }
     If '$D(tVars("appuserpwd")) { Set tVars("appuserpwd")="sys" }
     If '$D(tVars("SRCDIR")) { Set tVars("SRCDIR")="/home/irisowner/src/MyApp/" }
-    #; create app db in other place than MGRDIR so that you have R/W access to it.
     If '$D(tVars("DB")) { Set tVars("DB")=Namespace }
+    #; create data db in other place than MGRDIR so that you have R/W access to it.
     If '$D(tVars("DBDIR")) { Set tVars("DBDIR")="/home/irisowner/db/" }
+    #; create code db in other place than MGRDIR so that you can load/execute UnitTests.
+    If '$D(tVars("CODEDIR")) { Set tVars("CODEDIR")="/home/irisowner/code/" }
     Set tSC=..setupMethod(.tVars)
     $$$ThrowOnError(tSC)
 

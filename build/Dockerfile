@@ -12,8 +12,11 @@ ARG COMMIT_ID="unknown"
 USER irisowner
 
 ENV SRCDIR=src
+ENV UnitTestDIR=UnitTest
+COPY externalize.cos .
+COPY unittest.cos .
 COPY simple-atelier-prj/ $SRCDIR/
-COPY externalize.txt /home/$ISC_PACKAGE_MGRGROUP/
+COPY simple-atelier-prj/UnitTest/ $UnitTestDIR/
 
 RUN  iris start $ISC_PACKAGE_INSTANCENAME \ 
  && printf 'Do ##class(Config.NLS.Locales).Install("jpuw") h\n' | iris session $ISC_PACKAGE_INSTANCENAME -U %SYS \
