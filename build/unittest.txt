@@ -1,0 +1,3 @@
+Set ^UnitTestRoot="/external-misc/vol/unittest"
+do ##class(UnitTest.MyApp.TestUtil).RunTest()
+h

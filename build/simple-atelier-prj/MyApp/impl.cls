@@ -1,7 +1,7 @@
 /// very simple api<br/>
 /// Business logic class defined by OpenAPI in myapp.spec<br/>
 /// Created Nov 15, 2019 15:55:52
-Class myapp.impl Extends %REST.Impl [ ProcedureBlock ]
+Class MyApp.impl Extends %REST.Impl [ ProcedureBlock ]
 {
 
 /// If ExposeServerExceptions is true, then details of internal errors will be exposed.

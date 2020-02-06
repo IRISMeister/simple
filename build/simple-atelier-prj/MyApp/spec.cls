@@ -1,4 +1,4 @@
-Class myapp.spec Extends %REST.Spec [ ProcedureBlock ]
+Class MyApp.spec Extends %REST.Spec [ ProcedureBlock ]
 {
 
 XData OpenAPI [ MimeType = application/json ]

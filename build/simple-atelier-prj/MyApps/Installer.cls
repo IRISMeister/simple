@@ -19,7 +19,7 @@ XData setup [ XMLNamespace = INSTALLER ]
 
     <CSPApplication Url="/csp/${Namespace}" Directory="${CSPDIR}${Namespace}" Resource=""/>
     <Import File="${SRCDIR}" Flags="ck" Recurse="true"/>
-    <Invoke Class="myapp.Utils" Method="Init" CheckStatus="1" Return="RetVal">
+    <Invoke Class="MyApp.Utils" Method="Init" CheckStatus="1" Return="RetVal">
     </Invoke>
   </Namespace>
 
@@ -56,7 +56,7 @@ ClassMethod setup(ByRef tVars) As %Status
 
     Set tSC = ##Class(Security.Applications).Get(webapp,.props)
     $$$ThrowOnError(tSC)
-    Set props("DispatchClass")="myapp.disp"
+    Set props("DispatchClass")="MyApp.disp"
     Set props("Resource")=""
     Set props("DeepSeeEnabled")=1
     Set props("MatchRoles")=":%All"
