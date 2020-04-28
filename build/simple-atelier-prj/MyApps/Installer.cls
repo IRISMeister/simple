@@ -4,8 +4,8 @@ Class MyApps.Installer
 XData setup [ XMLNamespace = INSTALLER ]
 {
 <Manifest>
-<Var Name="DATADB" Value="${DB}-DATA"/>
-<Var Name="CODEDB" Value="${DB}-CODE"/>
+<Var Name="DATADB" Value="${Namespace}-DATA"/>
+<Var Name="CODEDB" Value="${Namespace}-CODE"/>
 
 <User Username="appuser" PasswordVar="appuserpwd" Roles="" Namespace="" Routine="" ExpirationDate="" Enabled="1" Comment="appilication user"/>
 
@@ -13,7 +13,7 @@ XData setup [ XMLNamespace = INSTALLER ]
   <Log Text="Creating namespace ${Namespace}" Level="0"/>
   <Namespace Name="${Namespace}" Create="yes" Code="${CODEDB}" Ensemble="0" Data="${DATADB}">
     <Configuration>
-      <Database Name="${CODEDB}" Dir="${CODEDIR}${CODEDB}" Create="yes" Resource="%DB_${CODEDB}"/>
+      <Database Name="${CODEDB}" Dir="${DBDIR}${CODEDB}" Create="yes" Resource="%DB_${CODEDB}"/>
       <Database Name="${DATADB}" Dir="${DBDIR}${DATADB}" Create="yes" Resource="%DB_${DATADB}"/>
     </Configuration>
 
@@ -44,11 +44,11 @@ ClassMethod setup(ByRef tVars) As %Status
     If '$D(tVars("Namespace")) { Set tVars("Namespace")=Namespace }
     If '$D(tVars("appuserpwd")) { Set tVars("appuserpwd")="sys" }
     If '$D(tVars("SRCDIR")) { Set tVars("SRCDIR")="/home/irisowner/src/MyApp/" }
-    If '$D(tVars("DB")) { Set tVars("DB")=Namespace }
-    #; create data db in other place than MGRDIR so that you have R/W access to it.
-    If '$D(tVars("DBDIR")) { Set tVars("DBDIR")="/home/irisowner/db/" }
-    #; create code db in other place than MGRDIR so that you can load/execute UnitTests.
-    If '$D(tVars("CODEDIR")) { Set tVars("CODEDIR")="/home/irisowner/code/" }
+    #;If '$D(tVars("DB")) { Set tVars("DB")=Namespace }
+
+    #; specify database dir
+    If '$D(tVars("DBDIR")) { Set tVars("DBDIR")="/home/irisowner/" }
+
     Set tSC=..setupMethod(.tVars)
     $$$ThrowOnError(tSC)
 
@@ -75,7 +75,7 @@ ClassMethod setup(ByRef tVars) As %Status
   Return tSC
 }
 
-ClassMethod externalize() As %Status
+ClassMethod externalize(ByRef tVars) As %Status
 {
   Set tSC='$$$OK
   Try {
@@ -85,8 +85,11 @@ ClassMethod externalize() As %Status
 	  Set $NAMESPACE="%SYS"
 
     #; make app databases external to container.
-    Set dbname="MYAPP-DATA"
-    Set dbpath="/vol-data/myapp-data"
+    If '$D(tVars("dbname")) { Set tVars("dbname")="MYAPP-DATA" }
+    If '$D(tVars("dbpath")) { Set tVars("dbpath")="/vol-data/MYAPP-DATA" }
+
+    Set dbname=tVars("dbname")
+    Set dbpath=tVars("dbpath")
     Set db=##Class(SYS.Database).%New()
     Set db.Directory=dbpath
     Set tSC=db.%Save()

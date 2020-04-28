@@ -1,0 +1,2 @@
+Set tVars("dbname")="MYAPP-DATA",tVars("dbpath")="/vol-data/MYAPP-DATA" Do $SYSTEM.Process.Terminate($J,'+##class(MyApps.Installer).externalize(.tVars))
+h

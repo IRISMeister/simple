@@ -1,4 +1,4 @@
-FROM store/intersystems/iris-community:2019.4.0.383.0
+FROM store/intersystems/iris-community:2020.1.0.215.0
 
 ARG COMMIT_ID="unknown"
 
@@ -13,8 +13,7 @@ USER irisowner
 
 ENV SRCDIR=src
 ENV UnitTestDIR=UnitTest
-COPY externalize.cos .
-COPY unittest.cos .
+
 COPY simple-atelier-prj/ $SRCDIR/
 COPY simple-atelier-prj/UnitTest/ $UnitTestDIR/
 
@@ -25,7 +24,7 @@ RUN  iris start $ISC_PACKAGE_INSTANCENAME \
  && iris stop $ISC_PACKAGE_INSTANCENAME quietly
 
 #++ until imageBuildSteps.sh is chnaged++
-# imageBuildSteps makes appuser 'ForceChangePassword' state....
+# imageBuildSteps makes unpriviledged user (appuser) 'ForceChangePassword' state....
 RUN iris start $ISC_PACKAGE_INSTANCENAME nostu quietly \
  && printf "kill ^%%SYS(\"JOURNAL\") kill ^SYS(\"NODE\") h\n" | iris session $ISC_PACKAGE_INSTANCENAME -B | cat \
  && iris stop $ISC_PACKAGE_INSTANCENAME quietly bypass \
@@ -40,8 +39,9 @@ RUN iris start $ISC_PACKAGE_INSTANCENAME nostu quietly \
 USER root
 #RUN /usr/irissys/dev/Container/imageBuildSteps.sh
 
-# cpf merger is not yet ready.
-RUN sed -ie 's/globals=0,0,0,0,0,0/globals=0,0,64,0,0,0/' $ISC_PACKAGE_INSTALLDIR/iris.cpf && chown irisowner:irisuser $ISC_PACKAGE_INSTALLDIR/iris.cpf
+# Use cpf merge, instead.
+# RUN sed -ie 's/globals=0,0,0,0,0,0/globals=0,0,64,0,0,0/' $ISC_PACKAGE_INSTALLDIR/iris.cpf && chown irisowner:irisuser $ISC_PACKAGE_INSTALLDIR/iris.cpf
+
 # need to be root because $SRCDIR's owner is root:root.
 RUN rm -rf $SRCDIR
 USER irisowner

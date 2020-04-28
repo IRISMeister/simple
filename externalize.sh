@@ -1,8 +1,9 @@
 #!/bin/bash -e
 
 # change owner form default(root) to iris friendly one.
-docker-compose exec -u root irissvc bash -c "mkdir /vol-data/myapp-data; chown -R irisowner:irisuser /vol-data"
+docker-compose exec -u root iris bash -c "mkdir /vol-data/MYAPP-DATA; chown -R irisowner:irisuser /vol-data"
 
-# externalize WIJ & user data database. (Code database remains inside a container)
-# You can't use this container image for dev environment because MYAPP (routines) are now Read-only because of Durable Sys
-docker-compose exec irissvc bash -c "iris session iris -U USER < externalize.cos"
+docker-compose exec -T iris bash -c "\$ISC_PACKAGE_INSTALLDIR/dev/Cloud/ICM/waitISC.sh '' 10"
+
+# externalize user data database. (Code database remains inside a container)
+docker-compose exec iris bash -c "iris session iris -U USER < /home/irisowner/cos/externalize.cos"

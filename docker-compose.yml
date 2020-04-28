@@ -1,7 +1,7 @@
 version: '3.7'
 #
 services:
-  irissvc:
+  iris:
     build:
       context: ./build
       args:
@@ -20,11 +20,14 @@ services:
     # ISC = InterSystems IRIS install dir
     - external-vol-mgr:/iris-mgr
     - external-vol-db:/vol-data
+    - ./cos:/home/irisowner/cos
+    - ./UserCPF:/home/irisowner/cpf
 
     environment:
     - TZ=JST-9
     #; comment out this line to enable durable sys
     - ISC_DATA_DIRECTORY=/iris-mgr/IRIS_conf.d
+    - ISC_CPF_MERGE_FILE=/home/irisowner/cpf/merge.cpf
 
 volumes:
        external-vol-mgr:

@@ -11,7 +11,7 @@ You will be prompted to change your password for the first time you access manag
 ```
 ## To run
 ```
-# ./up.sh
+# docker-compose up -d
 ```
 ## To test api calls
 ```
@@ -25,7 +25,7 @@ You will be prompted to change your password for the first time you access manag
 ```
 ## To completely remove
 ```
-# ./down.sh
+# docker-compose down -v
 ```
 ## To externalize MYAPP database, do the following while container is running.
 ```

@@ -2,6 +2,6 @@
     "objectscript.conn.port": 52773,
     "objectscript.conn.password": "sys",
     "objectscript.conn.ns": "myapp",
-    "objectscript.conn.active": true,
+    "objectscript.conn.active": false,
     "objectscript.conn.username": "SuperUser"
 }
