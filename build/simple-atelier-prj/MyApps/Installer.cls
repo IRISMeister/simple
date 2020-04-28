@@ -110,9 +110,17 @@ ClassMethod externalize(ByRef tVars) As %Status
 
     Set DATADB=tVars("DATADB")
     Set DBDIR=tVars("DBDIR")_"/"_DATADB
-    Set db=##Class(SYS.Database).%New()
-    Set db.Directory=DBDIR
-    Set tSC=db.%Save()
+
+    #; Create new one
+    #;Set db=##Class(SYS.Database).%New()
+    #;Set db.Directory=DBDIR
+    #;Set tSC=db.%Save()
+    #;$$$ThrowOnError(tSC)
+
+    #; Move exsiting one
+    Set tSC=##Class(Config.Databases).Get("MYAPP-DATA",.Properties)
+    $$$ThrowOnError(tSC)
+    Set tSC=##Class(SYS.Database).Copy(Properties("Directory"),DBDIR)
     $$$ThrowOnError(tSC)
 
     Set tSC=##Class(Config.Databases).Get(DATADB,.Properties)
