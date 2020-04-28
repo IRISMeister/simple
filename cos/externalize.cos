@@ -1,2 +1,2 @@
-Set tVars("dbname")="MYAPP-DATA",tVars("dbpath")="/vol-data/MYAPP-DATA" Do $SYSTEM.Process.Terminate($J,'+##class(MyApps.Installer).externalize(.tVars))
-h
+Set tVars("DBDIR")="/vol-data" Set tSC=##class(MyApps.Installer).externaldb(.tVars) If (tSC'=0) { Do $SYSTEM.Process.Terminate($J,'+tSC) }
+Set tVars("DATADB")="MYAPP-DATA",tVars("DBDIR")="/vol-data" Do $SYSTEM.Process.Terminate($J,'+##class(MyApps.Installer).externalize(.tVars))

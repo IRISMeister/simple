@@ -1,3 +1,1 @@
-Set ^UnitTestRoot="/home/irisowner/UnitTest"
-do ##class(MyApp.TestUtil).RunTest()
-h
+Set ^UnitTestRoot="/home/irisowner/UnitTest" do ##class(MyApp.TestUtil).RunTest()

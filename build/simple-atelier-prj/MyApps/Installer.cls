@@ -4,12 +4,11 @@ Class MyApps.Installer
 XData setup [ XMLNamespace = INSTALLER ]
 {
 <Manifest>
-<Var Name="DATADB" Value="${Namespace}-DATA"/>
-<Var Name="CODEDB" Value="${Namespace}-CODE"/>
+  <Var Name="DATADB" Value="${Namespace}-DATA"/>
+  <Var Name="CODEDB" Value="${Namespace}-CODE"/>
 
-<User Username="appuser" PasswordVar="appuserpwd" Roles="" Namespace="" Routine="" ExpirationDate="" Enabled="1" Comment="appilication user"/>
+  <User Username="appuser" PasswordVar="appuserpwd" Roles="" Namespace="" Routine="" ExpirationDate="" Enabled="1" Comment="appilication user"/>
 
-<If Condition='(##class(Config.Namespaces).Exists("${Namespace}")=0)'>
   <Log Text="Creating namespace ${Namespace}" Level="0"/>
   <Namespace Name="${Namespace}" Create="yes" Code="${CODEDB}" Ensemble="0" Data="${DATADB}">
     <Configuration>
@@ -24,8 +23,23 @@ XData setup [ XMLNamespace = INSTALLER ]
   </Namespace>
 
   <Log Text="End Creating namespace ${Namespace}" Level="0"/>
-</If>
 
+</Manifest>
+}
+
+XData externaldb
+{
+<Manifest>
+  <Default Name="Namespace" Value="MYAPPEXT"/>
+  <Default Name="DBDIR" Value="/vol-data" />
+
+  <If Condition='(##class(Config.Namespaces).Exists("${Namespace}")=0)'>
+    <Namespace Name="${Namespace}" Code="${Namespace}" Data="${Namespace}" Create="yes" Ensemble="no">
+      <Configuration>
+        <Database Name="${Namespace}" Dir="${DBDIR}/${Namespace}" Create="yes" Resource="%DB_${Namespace}"/>
+      </Configuration>
+    </Namespace>
+  </If>
 </Manifest>
 }
 
@@ -44,7 +58,6 @@ ClassMethod setup(ByRef tVars) As %Status
     If '$D(tVars("Namespace")) { Set tVars("Namespace")=Namespace }
     If '$D(tVars("appuserpwd")) { Set tVars("appuserpwd")="sys" }
     If '$D(tVars("SRCDIR")) { Set tVars("SRCDIR")="/home/irisowner/src/MyApp/" }
-    #;If '$D(tVars("DB")) { Set tVars("DB")=Namespace }
 
     #; specify database dir
     If '$D(tVars("DBDIR")) { Set tVars("DBDIR")="/home/irisowner/" }
@@ -75,6 +88,13 @@ ClassMethod setup(ByRef tVars) As %Status
   Return tSC
 }
 
+ClassMethod externaldb(ByRef pVars, pLogLevel As %Integer = 3, pInstaller As %Installer.Installer, pLogger As %Installer.AbstractLogger) As %Status [ CodeMode = objectgenerator, Internal ]
+{
+  #; Let XGL document generate code for this method.
+  Quit ##class(%Installer.Manifest).%Generate(%compiledclass, %code, "externaldb")
+}
+
+/// move an existing database file to new location
 ClassMethod externalize(ByRef tVars) As %Status
 {
   Set tSC='$$$OK
@@ -85,20 +105,20 @@ ClassMethod externalize(ByRef tVars) As %Status
 	  Set $NAMESPACE="%SYS"
 
     #; make app databases external to container.
-    If '$D(tVars("dbname")) { Set tVars("dbname")="MYAPP-DATA" }
-    If '$D(tVars("dbpath")) { Set tVars("dbpath")="/vol-data/MYAPP-DATA" }
+    If '$D(tVars("DATADB")) { Set tVars("DATADB")="MYAPP-DATA" }
+    If '$D(tVars("DBDIR")) { Set tVars("DBDIR")="/vol-data" }
 
-    Set dbname=tVars("dbname")
-    Set dbpath=tVars("dbpath")
+    Set DATADB=tVars("DATADB")
+    Set DBDIR=tVars("DBDIR")_"/"_DATADB
     Set db=##Class(SYS.Database).%New()
-    Set db.Directory=dbpath
+    Set db.Directory=DBDIR
     Set tSC=db.%Save()
     $$$ThrowOnError(tSC)
 
-    Set tSC=##Class(Config.Databases).Get(dbname,.Properties)
+    Set tSC=##Class(Config.Databases).Get(DATADB,.Properties)
     $$$ThrowOnError(tSC)
-    Set Properties("Directory")=dbpath
-    Set tSC=##Class(Config.Databases).Modify(dbname,.Properties)
+    Set Properties("Directory")=DBDIR
+    Set tSC=##Class(Config.Databases).Modify(DATADB,.Properties)
     $$$ThrowOnError(tSC)
 
 	  Set $NAMESPACE=oldns
