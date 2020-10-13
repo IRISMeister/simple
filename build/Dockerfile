@@ -14,8 +14,8 @@ USER irisowner
 ENV SRCDIR=src
 ENV UnitTestDIR=UnitTest
 
-COPY simple-atelier-prj/ $SRCDIR/
-COPY simple-atelier-prj/UnitTest/ $UnitTestDIR/
+COPY src/ $SRCDIR/
+COPY src/UnitTest/ $UnitTestDIR/
 
 RUN  iris start $ISC_PACKAGE_INSTANCENAME \ 
  && printf 'Do ##class(Config.NLS.Locales).Install("jpuw") h\n' | iris session $ISC_PACKAGE_INSTANCENAME -U %SYS \
