@@ -1,7 +1,10 @@
 {
-    "objectscript.conn.port": 52773,
-    "objectscript.conn.password": "sys",
-    "objectscript.conn.ns": "myapp",
-    "objectscript.conn.active": false,
-    "objectscript.conn.username": "SuperUser"
+    "objectscript.conn": {
+        "active": false,
+        "host": "localhost",
+        "port": 52773,
+        "ns": "myapp",
+        "username": "SuperUser",
+        "password": "SYS"
+    }
 }
