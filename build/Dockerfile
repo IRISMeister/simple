@@ -39,9 +39,6 @@ RUN iris start $ISC_PACKAGE_INSTANCENAME nostu quietly \
 USER root
 #RUN /usr/irissys/dev/Container/imageBuildSteps.sh
 
-# Use cpf merge, instead.
-# RUN sed -ie 's/globals=0,0,0,0,0,0/globals=0,0,64,0,0,0/' $ISC_PACKAGE_INSTALLDIR/iris.cpf && chown irisowner:irisuser $ISC_PACKAGE_INSTALLDIR/iris.cpf
-
 # need to be root because $SRCDIR's owner is root:root.
 RUN rm -rf $SRCDIR
 USER irisowner
