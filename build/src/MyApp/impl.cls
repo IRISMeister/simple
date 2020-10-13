@@ -12,7 +12,7 @@ ClassMethod Get() As %Stream.Object
 {
     Do ..%SetHeader("Content-Type","application/json")
     set imageBuilt=$G(^ImageBuildDate)
-	Set ret={"HostName":($SYSTEM.INetInfo.LocalHostName()),"UserName":($USERNAME),"Status":"OK","TimeStamp":($ZDATETIME($H)),"ImageBuilt":(imageBuilt)}
+	Set ret={"HostName":($SYSTEM.INetInfo.LocalHostName()),"UserName":($USERNAME),"Status":"OK","TimeStamp":($ZDATETIME($H)),"JP Date":(##class(Util.JDate).LogicalToDisplay(+$H,2)),"ImageBuilt":(imageBuilt)}
 	Set ^log($INCREMENT(^log))=ret.TimeStamp
     Quit ret
 }

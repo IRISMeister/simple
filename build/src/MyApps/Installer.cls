@@ -18,12 +18,13 @@ XData setup [ XMLNamespace = INSTALLER ]
 
     <CSPApplication Url="/csp/${Namespace}" Directory="${CSPDIR}${Namespace}" Resource=""/>
     <Import File="${SRCDIR}" Flags="ck" Recurse="true"/>
+    <Import File="${SRCDIR}../JDate/src/" Flags="ck" Recurse="true"/>
     <Invoke Class="MyApp.Utils" Method="Init" CheckStatus="1" Return="RetVal">
     </Invoke>
   </Namespace>
 
   <Log Text="End Creating namespace ${Namespace}" Level="0"/>
-
+  
 </Manifest>
 }
 

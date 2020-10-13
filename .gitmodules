@@ -1,0 +1,3 @@
+[submodule "build/src/JDate"]
+	path = build/src/JDate
+	url = https://github.com/intersystems-community/JDate.git
