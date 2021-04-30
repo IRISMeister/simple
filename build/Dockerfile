@@ -1,4 +1,4 @@
-FROM store/intersystems/iris-community:2020.1.0.215.0
+FROM containers.intersystems.com/intersystems/iris-community:2021.1.0.205.0
 
 ARG COMMIT_ID="unknown"
 
@@ -33,7 +33,8 @@ RUN iris start $ISC_PACKAGE_INSTANCENAME nostu quietly \
  && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/iris.ids \
  && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/alerts.log \
  && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/journal/* \
- && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/messages.log
+ && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/messages.log \
+ && touch $ISC_PACKAGE_INSTALLDIR/mgr/messages.log
 #-- until imageBuildSteps.sh is chnaged--
 
 USER root
