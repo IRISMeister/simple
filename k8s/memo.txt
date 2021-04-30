@@ -1,4 +1,4 @@
-$ docker-compose build
+$ COMPOSE_DOCKER_CLI_BUILD=1 docker-compose build
 $ docker-compose push
 イメージ格納場所がdockerとは異なるので、push/pullが必要。
 
@@ -9,11 +9,6 @@ $ docker push localhost:32000/simple
 
 $ ./run.sh
 
-ToDo:
-なぜかpasswordhashが反映されていない。下記を実行すると反映される。
-ベースイメージ(containers.intersystems.com/intersystems/iris-community:2021.1.0.205.0)使用時には不要な再起動。
-$ microk8s kubectl exec -it iris-0 -- iris restart iris
-
 $ microk8s kubectl get svc -l app=my-iris
 NAME   TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)           AGE
 iris   LoadBalancer   10.152.183.133   192.168.11.110   52773:31335/TCP   3m37s
@@ -21,4 +16,18 @@ iris   LoadBalancer   10.152.183.133   192.168.11.110   52773:31335/TCP   3m37s
 $ ../app-call1.sh 192.168.11.110
 
 $ microk8s kubectl exec -it iris-0 -- bash
+
+ToDo:
+なぜかpasswordhashが反映されていない。再起動すると反映される。
+$ microk8s kubectl exec -it iris-0 -- iris restart iris
+
+dockerでも同じ現象を確認。Dockerfileのlocale設定箇所を削除すると反映されるようになった...??? 
+ただ、appuserはroleを持たないのにappuserのパスワードも変わった。
+the stored password hash is set to PasswordHash for each enabled user account with at least one assigned role
+
+before> && printf 'Do ##class(Config.NLS.Locales).Install("jpuw") h\n' | iris session $ISC_PACKAGE_INSTANCENAME -U %SYS \
+after > && printf 'h\n' | iris session $ISC_PACKAGE_INSTANCENAME -U %SYS \
+逆に
+before> && printf 'Do ##class(Config.NLS.Locales).Install("jpuw") h\n' | iris session $ISC_PACKAGE_INSTANCENAME -U %SYS \
+本現象はlocale設定だけで発生する模様。
 
