@@ -52,6 +52,7 @@ spec:
       terminationGracePeriodSeconds: 10
       containers:
       - name: iris
+        #image: containers.intersystems.com/intersystems/iris-community:2021.1.0.205.0
         #image: dpmeister/simple
         image: localhost:32000/simple
         imagePullPolicy: "Always"

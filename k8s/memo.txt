@@ -11,6 +11,7 @@ $ ./run.sh
 
 ToDo:
 なぜかpasswordhashが反映されていない。下記を実行すると反映される。
+ベースイメージ(containers.intersystems.com/intersystems/iris-community:2021.1.0.205.0)使用時には不要な再起動。
 $ microk8s kubectl exec -it iris-0 -- iris restart iris
 
 $ microk8s kubectl get svc -l app=my-iris
