@@ -38,3 +38,6 @@ MYAPP>zw ^log
 ^log=1
 ^log(1)="05/06/2021 12:37:21"
 MYAPP>
+
+停止、削除。Durable Sys, DBに使用したpvcも削除。
+$ ./delete.sh
