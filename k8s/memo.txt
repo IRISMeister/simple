@@ -1,11 +1,20 @@
-$ COMPOSE_DOCKER_CLI_BUILD=1 docker-compose build
-$ docker-compose push
-イメージ格納場所がdockerとは異なるので、push/pullが必要。
+k8sはmicrok8sを使用して単独ホストで稼働させている。
 
-アップロードが低速な場合は、microk8sが用意したローカルのレポジトリを使う手もある。
-この場合、simple.ymlのimageもlocalhost:32000/simpleに変更する事。
+$ sudo snap install microk8s --classic --channel=1.21/stable
+$ microk8s start
+$ microk8s enable dns registry helm3 storage metallb
+metallb用のIPレンジに適切な範囲を設定 
+    k8s稼働環境がDefault G/W:192.168.11.1
+    CIDR:192.168.11.0/24 
+    とかであれば、[192.168.11.100-192.168.11.130]など。
+
+イメージ格納場所がdockerとは異なるので、build後にpush/pullが必要。
+アップロードが低速な場合を考慮し、microk8sが用意したローカルのレポジトリを使っている。
+$ COMPOSE_DOCKER_CLI_BUILD=1 docker-compose build
 $ docker tag dpmeister/simple localhost:32000/simple
 $ docker push localhost:32000/simple
+
+デプロイの際には、docker-compose.ymlとsimple.ymlのimageを自分用に変更する事。
 
 $ ./run.sh
 
@@ -14,20 +23,18 @@ NAME   TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)           AGE
 iris   LoadBalancer   10.152.183.133   192.168.11.110   52773:31335/TCP   3m37s
 
 $ ../app-call1.sh 192.168.11.110
+{
+    "HostName": "iris-0",
+    "UserName": "appuser",
+    "Status": "OK",
+    "TimeStamp": "05/06/2021 13:10:03",
+    "ImageBuilt": "05/06/2021 04:06:31"
+}
+$
 
-$ microk8s kubectl exec -it iris-0 -- bash
-
-ToDo:
-なぜかpasswordhashが反映されていない。再起動すると反映される。
-$ microk8s kubectl exec -it iris-0 -- iris restart iris
-
-dockerでも同じ現象を確認。Dockerfileのlocale設定箇所を削除すると反映されるようになった...??? 
-ただ、appuserはroleを持たないのにappuserのパスワードも変わった。
-the stored password hash is set to PasswordHash for each enabled user account with at least one assigned role
-
-before> && printf 'Do ##class(Config.NLS.Locales).Install("jpuw") h\n' | iris session $ISC_PACKAGE_INSTANCENAME -U %SYS \
-after > && printf 'h\n' | iris session $ISC_PACKAGE_INSTANCENAME -U %SYS \
-逆に
-before> && printf 'Do ##class(Config.NLS.Locales).Install("jpuw") h\n' | iris session $ISC_PACKAGE_INSTANCENAME -U %SYS \
-本現象はlocale設定だけで発生する模様。
-
+$ microk8s kubectl exec -it iris-0 -- iris session iris -U MYAPP
+ノード: iris-0 インスタンス: IRIS
+MYAPP>zw ^log
+^log=1
+^log(1)="05/06/2021 12:37:21"
+MYAPP>
