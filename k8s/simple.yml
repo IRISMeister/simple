@@ -8,7 +8,6 @@ data:
     [Startup]
     SystemMode=TEST
     WebServer=1
-    PasswordHash=d8191b3c433ed48c7cd60cb7a4b1bfd3068b38db,t6jhs1sc
 
     [config]
     globals=0,0,32,0,0,0
@@ -16,7 +15,8 @@ data:
 
     [Actions]
     CreateDatabase:Name=MYAPP2-DATA,Directory=/vol-data/MYAPP2-DATA
-    CreateNamespace:Name=MYAPP2,Globals=MYAPP2-DATA,Routines=MYAPP2-DATA
+    ModifyNamespace:Name=MYAPP,Globals=MYAPP2-DATA,Routines=MYAPP-CODE
+
 ---
 apiVersion: v1
 kind: Service

@@ -27,22 +27,6 @@ XData setup [ XMLNamespace = INSTALLER ]
 </Manifest>
 }
 
-XData externaldb
-{
-<Manifest>
-  <Default Name="Namespace" Value="MYAPPEXT"/>
-  <Default Name="DBDIR" Value="/vol-data" />
-
-  <If Condition='(##class(Config.Namespaces).Exists("${Namespace}")=0)'>
-    <Namespace Name="${Namespace}" Code="${Namespace}" Data="${Namespace}" Create="yes" Ensemble="no">
-      <Configuration>
-        <Database Name="${Namespace}" Dir="${DBDIR}/${Namespace}" Create="yes" Resource="%DB_${Namespace}"/>
-      </Configuration>
-    </Namespace>
-  </If>
-</Manifest>
-}
-
 ClassMethod setupMethod(ByRef pVars, pLogLevel As %Integer = 3, pInstaller As %Installer.Installer, pLogger As %Installer.AbstractLogger) As %Status [ CodeMode = objectgenerator, Internal ]
 {
   Quit ##class(%Installer.Manifest).%Generate(%compiledclass, %code, "setup")
@@ -82,54 +66,6 @@ ClassMethod setup(ByRef tVars) As %Status
 
     Set $NAMESPACE=oldns
 
-  } Catch(e) {
-	  Set tSC=e.AsStatus()
-  }
-  Return tSC
-}
-
-ClassMethod externaldb(ByRef pVars, pLogLevel As %Integer = 3, pInstaller As %Installer.Installer, pLogger As %Installer.AbstractLogger) As %Status [ CodeMode = objectgenerator, Internal ]
-{
-  #; Let XGL document generate code for this method.
-  Quit ##class(%Installer.Manifest).%Generate(%compiledclass, %code, "externaldb")
-}
-
-/// move an existing database file to new location
-ClassMethod externalize(ByRef tVars) As %Status
-{
-  Set tSC='$$$OK
-  Try {
-
-	  Set oldns=$NAMESPACE
-	  New $NAMESPACE   ; just in case
-	  Set $NAMESPACE="%SYS"
-
-    #; make app databases external to container.
-    If '$D(tVars("DATADB")) { Set tVars("DATADB")="MYAPP-DATA" }
-    If '$D(tVars("DBDIR")) { Set tVars("DBDIR")="/vol-data" }
-
-    Set DATADB=tVars("DATADB")
-    Set DBDIR=tVars("DBDIR")_"/"_DATADB
-
-    #; Create new one
-    #;Set db=##Class(SYS.Database).%New()
-    #;Set db.Directory=DBDIR
-    #;Set tSC=db.%Save()
-    #;$$$ThrowOnError(tSC)
-
-    #; Move exsiting one
-    Set tSC=##Class(Config.Databases).Get("MYAPP-DATA",.Properties)
-    $$$ThrowOnError(tSC)
-    Set tSC=##Class(SYS.Database).Copy(Properties("Directory"),DBDIR)
-    $$$ThrowOnError(tSC)
-
-    Set tSC=##Class(Config.Databases).Get(DATADB,.Properties)
-    $$$ThrowOnError(tSC)
-    Set Properties("Directory")=DBDIR
-    Set tSC=##Class(Config.Databases).Modify(DATADB,.Properties)
-    $$$ThrowOnError(tSC)
-
-	  Set $NAMESPACE=oldns
   } Catch(e) {
 	  Set tSC=e.AsStatus()
   }

@@ -1,3 +1,10 @@
+[Startup]
+SystemMode=TEST
+WebServer=1
 [config]
-globals=0,0,64,0,0,0
-routines=64
+globals=0,0,32,0,0,0
+routines=32
+
+[Actions]
+CreateDatabase:Name=MYAPP2-DATA,Directory=/vol-data/MYAPP2-DATA
+ModifyNamespace:Name=MYAPP,Globals=MYAPP2-DATA,Routines=MYAPP-CODE
