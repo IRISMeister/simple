@@ -8,14 +8,15 @@ data:
     [Startup]
     SystemMode=TEST
     WebServer=1
+    PasswordHash=FBFE8593AEFA510C27FD184738D6E865A441DE98,u4ocm4qh
 
     [config]
     globals=0,0,32,0,0,0
     routines=32
 
     [Actions]
-    CreateDatabase:Name=MYAPP2-DATA,Directory=/vol-data/MYAPP2-DATA
-    ModifyNamespace:Name=MYAPP,Globals=MYAPP2-DATA,Routines=MYAPP-CODE
+    CreateDatabase:Name=MYAPP-DATA-EXT,Directory=/vol-data/MYAPP-DATA
+    ModifyNamespace:Name=MYAPP,Globals=MYAPP-DATA-EXT,Routines=MYAPP-CODE
 
 ---
 apiVersion: v1
@@ -23,39 +24,52 @@ kind: Service
 metadata:
   name: iris
   labels:
-    app: my-iris
+    app: iris
 spec:
   type: LoadBalancer
+  selector:
+    app: iris
+  ports:
+  - protocol: TCP
+    port: 52773
+    targetPort: 52773
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: iris
+  labels:
+    app: iris
+spec:
   ports:
   - port: 52773
-    targetPort: 52773
     protocol: TCP
     name: http
+  clusterIP: None # Headless Service
   selector:
-    app: my-iris
+    app: iris
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: iris
+  name: data
 spec:
   selector:
     matchLabels:
-      app: my-iris
-  serviceName: "my-iris"
+      app: iris
+  serviceName: "iris"
   replicas: 1
   template:
     metadata:
       labels:
-        app: my-iris
+        app: iris
     spec:
-      terminationGracePeriodSeconds: 10
+      securityContext: 
+        fsGroup: 52773
       containers:
       - name: iris
-        #image: containers.intersystems.com/intersystems/iris-community:2021.1.0.205.0
-        #image: dpmeister/simple
-        image: localhost:32000/simple
-        imagePullPolicy: "Always"
+        image: dpmeister/simple:latest
         ports:
         - containerPort: 1972
         - containerPort: 52773
@@ -69,7 +83,7 @@ spec:
         volumeMounts:
         - mountPath: /irissys/cpf/
           name: iris-cpf
-        - mountPath: /iris-mgr/IRIS_conf.d
+        - mountPath: /iris-mgr
           name: dbv-mgr
         - mountPath: /vol-data
           name: dbv-data
@@ -81,17 +95,21 @@ spec:
   volumeClaimTemplates:
   - metadata:
       name: dbv-mgr
+      labels:
+        app: iris
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: microk8s-hostpath
+      #storageClassName: microk8s-hostpath
       resources:
         requests:
           storage: 1Gi
   - metadata:
       name: dbv-data
+      labels:
+        app: iris
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: microk8s-hostpath
+      #storageClassName: microk8s-hostpath
       resources:
         requests:
           storage: 1Gi
