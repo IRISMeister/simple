@@ -1,0 +1,27 @@
+version: '3.7'
+#
+services:
+  iris:
+    build:
+      context: ./build
+      args:
+        COMMIT_ID: ${COMMIT_ID}
+    image: dpmeister/simple
+    init: true
+    hostname: myiris
+
+    ports:
+    # superserver default port 
+    - "51773:51773"
+    # webserver/management portal port
+    - "52773:52773"
+
+    volumes:
+    # ISC = InterSystems IRIS install dir
+    - ./cos:/home/irisowner/cos
+    - ./UserCPF:/home/irisowner/cpf
+
+    environment:
+    - TZ=JST-9
+    #; comment out this line to disable durable sys
+    - ISC_CPF_MERGE_FILE=/home/irisowner/cpf/merge.cpf
