@@ -1,15 +1,13 @@
-FROM containers.intersystems.com/intersystems/iris-community:2022.2.0.293.0
+FROM containers.intersystems.com/intersystems/iris-community:2022.2.0.304.0
 
 ARG COMMIT_ID="unknown"
 
 #USER root
 #ENV DEBIAN_FRONTEND noninteractive
 #RUN apt-get update && apt-get install -y tzdata
-
-# IRIS itself doesn't require ja language pack
-#RUN apt-get install -y language-pack-ja && update-locale LANG=ja_JP.UTF-8
-
-USER irisowner
+### IRIS itself doesn't require ja language pack
+#RUN apt-get update && apt-get install -y language-pack-ja && update-locale LANG=ja_JP.UTF-8
+#USER irisowner
 
 ENV SRCDIR=src
 ENV UnitTestDIR=UnitTest

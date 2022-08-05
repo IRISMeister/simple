@@ -4,7 +4,10 @@ Class MyApp.TestUtil Extends %RegisteredObject
 ClassMethod RunTest()
 {
 #define AppTestPackageName "MyApp"
+	;Set tSC=##class(TestCoverage.Manager).RunTest($$$AppTestPackageName,"/nodelete")
 	Set tSC=##class(%UnitTest.Manager).RunTest($$$AppTestPackageName,"/nodelete")
+	Do ##class(%ZPM.PackageManager.Developer.UnitTest.JUnitOutput).ToFile("/home/irisowner/result.xml")
+
 	Set lastid=$G(^UnitTest.Result)
 	If ..getLastTestResult(lastid)=$$$OK {
 		Do $SYSTEM.Process.Terminate(,0)

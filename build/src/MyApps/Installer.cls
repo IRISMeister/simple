@@ -53,6 +53,16 @@ ClassMethod setup(ByRef tVars) As %Status
     New $NAMESPACE
     Set $NAMESPACE="%SYS"
 
+#If 1
+    #; install ZPM (UnitTest class)
+    d ##class(Security.SSLConfigs).Create("z")
+    Set r=##class(%Net.HttpRequest).%New(),r.Server="pm.community.intersystems.com",r.SSLConfiguration="z",r.Https=1
+    Set tSC=r.Get("/packages/zpm/latest/installer")
+    $$$ThrowOnError(tSC)
+    Set tSC=$system.OBJ.LoadStream(r.HttpResponse.Data,"c")
+    $$$ThrowOnError(tSC)
+#EndIf
+
     Set tSC = ##Class(Security.Applications).Get(webapp,.props)
     $$$ThrowOnError(tSC)
     Set props("DispatchClass")="MyApp.disp"
@@ -68,6 +78,7 @@ ClassMethod setup(ByRef tVars) As %Status
 
   } Catch(e) {
 	  Set tSC=e.AsStatus()
+    zw tSC
   }
   Return tSC
 }
