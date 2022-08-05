@@ -6,7 +6,7 @@ teststatus=$?
 printf '\nExit status from unittests:'$teststatus'\n'
 
 # copy JUnit style result.
-docker-compose -f docker-compose-unittest.yml exec iris cat result.xml
-docker-compose -f docker-compose-unittest.yml exec iris cat result.xml > result.xml
+docker-compose -f docker-compose-unittest.yml exec -T iris cat result.xml
+docker-compose -f docker-compose-unittest.yml exec -T iris cat result.xml > result.xml
 docker-compose -f docker-compose-unittest.yml down -v
 exit $teststatus
