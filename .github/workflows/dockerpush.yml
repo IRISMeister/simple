@@ -30,11 +30,7 @@ jobs:
       - name: Run tests
         run: |
           if [ -f unittest.sh ]; then
-            docker-compose -f docker-compose-unittest.yml up -d
             ./unittest.sh
-            docker-compose -f docker-compose-unittest.yml exec iris cat result.xml > ./result.xml
-            ls -la
-            docker-compose -f docker-compose-unittest.yml down
           fi
 
       - name: Publish Unit Test Results
