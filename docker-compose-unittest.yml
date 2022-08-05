@@ -2,10 +2,6 @@ version: '3.7'
 #
 services:
   iris:
-    build:
-      context: ./build
-      args:
-        COMMIT_ID: ${COMMIT_ID}
     image: dpmeister/simple
     init: true
     hostname: myiris
