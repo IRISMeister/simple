@@ -11,9 +11,13 @@ ARG COMMIT_ID="unknown"
 
 ENV SRCDIR=src
 ENV UnitTestDIR=UnitTest
+ENV SQLDIR=sql
+ENV CSVDIR=csv
 
 COPY src/ $SRCDIR/
 COPY src/UnitTest/ $UnitTestDIR/
+COPY sql/ $SQLDIR/
+COPY csv/ $CSVDIR/
 
 RUN  iris start $ISC_PACKAGE_INSTANCENAME \ 
  && printf 'Do ##class(Config.NLS.Locales).Install("jpuw") h\n' | iris session $ISC_PACKAGE_INSTANCENAME -U %SYS \

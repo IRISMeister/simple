@@ -1,0 +1,4 @@
+CREATE TABLE MyApp_DB.Table1(s VARCHAR(50))
+GO
+CREATE INDEX idx1 ON MyApp_DB.Table1(s)
+GO

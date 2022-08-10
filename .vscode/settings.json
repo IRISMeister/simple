@@ -6,7 +6,7 @@
                 "host": "localhost",
                 "port": 52773
             },
-            "username": "SuperUser"
+            "username": "_SYSTEM"
         }
     },
     "objectscript.conn": {

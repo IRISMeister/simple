@@ -53,9 +53,13 @@ ClassMethod setup(ByRef tVars) As %Status
     New $NAMESPACE
     Set $NAMESPACE="%SYS"
 
+    #; enable _SYSTEM for SQL Access.  
+    #; !!! Caution !!! _SYSTEM will have %All priviledge with default password.
+    Do ##class(Security.Users).UnExpireUserPasswords("_SYSTEM")
+
 #If 1
-    #; install ZPM (UnitTest class)
-    d ##class(Security.SSLConfigs).Create("z")
+    #; install ZPM (because I want to use UnitTest related utilities)
+    Do ##class(Security.SSLConfigs).Create("z")
     Set r=##class(%Net.HttpRequest).%New(),r.Server="pm.community.intersystems.com",r.SSLConfiguration="z",r.Https=1
     Set tSC=r.Get("/packages/zpm/latest/installer")
     $$$ThrowOnError(tSC)
