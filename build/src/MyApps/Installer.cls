@@ -53,10 +53,6 @@ ClassMethod setup(ByRef tVars) As %Status
     New $NAMESPACE
     Set $NAMESPACE="%SYS"
 
-    #; enable _SYSTEM for SQL Access.  
-    #; !!! Caution !!! _SYSTEM will have %All priviledge with default password.
-    Do ##class(Security.Users).UnExpireUserPasswords("_SYSTEM")
-
 #If 1
     #; install ZPM (because I want to use UnitTest related utilities)
     Do ##class(Security.SSLConfigs).Create("z")

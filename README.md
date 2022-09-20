@@ -19,6 +19,9 @@ You will be prompted to change your password for the first time you access manag
 # ./app-call1.sh
 # ./app-call2.sh
 ```
+## To access SMP
+Use _SYSTEM / SYS as a credential.
+
 ## To stop/run
 ```
 # ./docker-compose stop

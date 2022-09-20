@@ -1,4 +1,4 @@
-FROM containers.intersystems.com/intersystems/iris-community:2022.2.0.304.0
+FROM containers.intersystems.com/intersystems/iris-community:2022.2.0.334.0
 
 ARG COMMIT_ID="unknown"
 
@@ -14,7 +14,7 @@ ENV UnitTestDIR=UnitTest
 ENV SQLDIR=sql
 ENV CSVDIR=csv
 
-COPY src/ $SRCDIR/
+COPY --chown=$ISC_PACKAGE_IRISUSER:$ISC_PACKAGE_IRISGROUP src/ $SRCDIR/
 COPY src/UnitTest/ $UnitTestDIR/
 COPY sql/ $SQLDIR/
 COPY csv/ $CSVDIR/
@@ -25,8 +25,6 @@ RUN  iris start $ISC_PACKAGE_INSTANCENAME \
  && printf 'Set tSC=##class(MyApps.Installer).setup() Do:+tSC=0 $SYSTEM.Process.Terminate($JOB,1) h\n' | iris session $ISC_PACKAGE_INSTANCENAME \
  && iris stop $ISC_PACKAGE_INSTANCENAME quietly
 
-#++ until imageBuildSteps.sh is chnaged++
-# imageBuildSteps makes unpriviledged user (appuser) 'ForceChangePassword' state....
 RUN iris start $ISC_PACKAGE_INSTANCENAME nostu quietly \
  && printf "kill ^%%SYS(\"JOURNAL\") kill ^SYS(\"NODE\") h\n" | iris session $ISC_PACKAGE_INSTANCENAME -B | cat \
  && iris stop $ISC_PACKAGE_INSTANCENAME quietly bypass \
@@ -36,13 +34,6 @@ RUN iris start $ISC_PACKAGE_INSTANCENAME nostu quietly \
  && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/alerts.log \
  && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/journal/* \
  && rm -f $ISC_PACKAGE_INSTALLDIR/mgr/messages.log \
- && touch $ISC_PACKAGE_INSTALLDIR/mgr/messages.log
-#-- until imageBuildSteps.sh is chnaged--
-
-USER root
-#RUN /usr/irissys/dev/Container/imageBuildSteps.sh
-
-# need to be root because $SRCDIR's owner is root:root.
-RUN rm -rf $SRCDIR
-USER irisowner
-RUN echo $COMMIT_ID > $HOME/commit.txt
+ && touch $ISC_PACKAGE_INSTALLDIR/mgr/messages.log \
+ && rm -rf $SRCDIR \
+ && echo $COMMIT_ID > $HOME/commit.txt

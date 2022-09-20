@@ -1,4 +1,5 @@
 [Startup]
+PasswordHash=FBFE8593AEFA510C27FD184738D6E865A441DE98,u4ocm4qh
 SystemMode=TEST
 WebServer=1
 [config]
