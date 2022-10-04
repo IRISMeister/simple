@@ -2,6 +2,8 @@ version: '3.7'
 #
 services:
   iris:
+    depends_on:
+      - iris-init
     build:
       context: ./build
       args:
@@ -29,3 +31,10 @@ services:
     #; comment out this line to disable durable sys
     - ISC_DATA_DIRECTORY=/iris-mgr/IRIS_conf.d
     - ISC_CPF_MERGE_FILE=/home/irisowner/cpf/merge.cpf
+
+  iris-init:
+    command: 'chown -R 51773:51773 /iris-mgr /vol-data'
+    image: busybox
+    volumes:
+    - ./external-vol-mgr:/iris-mgr
+    - ./external-vol-db:/vol-data

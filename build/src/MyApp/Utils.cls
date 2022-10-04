@@ -25,7 +25,7 @@ ClassMethod LoadCSV() As %Status
 {
   Set opt={"from": {"file": {"header": true,"charset": "UTF-8"}}}.%ToJSON()
 
-  Set sql="LOAD DATA FROM FILE '/home/irisowner/csv/MyApp_DB.Table1.csv' INTO MyApp_DB.Table1 USING "_opt
+  Set sql="LOAD DATA FROM FILE '/home/irisowner/csv/Person.csv' INTO person USING "_opt
 
   set stmt = ##class(%SQL.Statement).%New()
   Set tSC=stmt.%Prepare(sql)

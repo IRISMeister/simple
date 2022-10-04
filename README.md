@@ -1,6 +1,13 @@
 # simple
 You will be prompted to change your password for the first time you access management portal.  
 
+## prep
+Install docker compose plugin.
+
+```bash
+$ sudo apt-get update
+$ sudo apt-get install docker-compose-plugin
+```
 
 ## To build
 ```
@@ -24,12 +31,13 @@ Use _SYSTEM / SYS as a credential.
 
 ## To stop/run
 ```
-# ./docker-compose stop
-# ./docker-compose start
+# docker compose stop
+# docker compose start
 ```
-## To completely remove
+## To completely remove (including databases)
 ```
 # ./down.sh
+# sudo rm -fR external-vol-*/*
 ```
 
 If you want to generate skeleton classes from a given openapi spec, do the following.   

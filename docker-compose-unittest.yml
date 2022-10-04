@@ -5,6 +5,8 @@ services:
     image: dpmeister/simple
     init: true
     hostname: myiris
+    command:
+      --check-caps false
 
     ports:
     # superserver default port 

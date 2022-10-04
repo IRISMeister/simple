@@ -1,3 +1,2 @@
 #!/bin/bash
-docker-compose down
-sudo rm -fR external-vol-*/*
+docker compose down
