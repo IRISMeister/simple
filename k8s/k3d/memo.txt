@@ -1,0 +1,39 @@
+k3dの場合
+
+
+$ k3d cluster create --agents 3
+
+$ k3d node list
+NAME                       ROLE           CLUSTER       STATUS
+k3d-k3s-default-agent-0    agent          k3s-default   running
+k3d-k3s-default-agent-1    agent          k3s-default   running
+k3d-k3s-default-agent-2    agent          k3s-default   running
+k3d-k3s-default-server-0   server         k3s-default   running
+k3d-k3s-default-serverlb   loadbalancer   k3s-default   running
+
+$ kubectl config get-contexts
+CURRENT   NAME              CLUSTER           AUTHINFO                               NAMESPACE
+*         k3d-k3s-default   k3d-k3s-default   admin@k3d-k3s-default <==こちらに変わっていることを確認 
+          myAKSCluster      myAKSCluster      clusterUser_iris-aks-rg_myAKSCluster
+
+$ kubectl get node
+NAME                       STATUS   ROLES                  AGE   VERSION
+k3d-k3s-default-server-0   Ready    control-plane,master   50s   v1.24.4+k3s1
+k3d-k3s-default-agent-1    Ready    <none>                 45s   v1.24.4+k3s1
+k3d-k3s-default-agent-2    Ready    <none>                 44s   v1.24.4+k3s1
+k3d-k3s-default-agent-0    Ready    <none>                 44s   v1.24.4+k3s1
+
+PVが特殊というかデフォルトではコンテナの中にできる。
+local-path-provisioner in k3d
+In k3d, the local paths that the local-path-provisioner uses (default is /var/lib/rancher/k3s/storage) lies inside the container’s filesystem, meaning that by default it’s not mapped somewhere e.g. in your user home directory for you to use. 
+You’d need to map some local directory to that path to easily use the files inside this path: add --volume $HOME/some/directory:/var/lib/rancher/k3s/storage@all to your k3d cluster create
+
+
+StorageClassのデプロイ
+$ kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.23/deploy/local-path-storage.yaml
+$ kubectl -n local-path-storage get pod
+NAME                                      READY   STATUS    RESTARTS   AGE
+local-path-provisioner-7ddf777785-svnt8   1/1     Running   0          79s
+
+$ kubectl apply -f simple.yml
+$ kubectl exec -ti -c iris iris-0 -- bash
