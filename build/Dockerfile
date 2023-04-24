@@ -1,4 +1,4 @@
-FROM containers.intersystems.com/intersystems/iris-community:2022.1.0.209.0
+FROM containers.intersystems.com/intersystems/iris-community:2023.1.0.229.0
 
 ARG COMMIT_ID="unknown"
 

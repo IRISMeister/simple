@@ -10,9 +10,7 @@ services:
         COMMIT_ID: ${COMMIT_ID}
     image: dpmeister/simple
     hostname: myiris
-    command:
-      --check-caps false
-
+    command: --ISCAgent false --monitorCPF false
     ports:
     # superserver default port 
     - "1972:1972"
