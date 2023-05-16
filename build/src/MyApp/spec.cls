@@ -16,7 +16,7 @@ XData OpenAPI [ MimeType = application/json ]
   "paths":{
     "/get":{
       "get":{
-        "summary":"情報を取得する",
+        "summary":"Get current info",
         "operationId":"Get",
         "responses":{
           "200":{
@@ -41,7 +41,7 @@ XData OpenAPI [ MimeType = application/json ]
     },
     "/history":{
       "get":{
-        "summary":"履歴を取得する",
+        "summary":"Get history",
         "operationId":"History",
         "responses":{
           "200":{
