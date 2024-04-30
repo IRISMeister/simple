@@ -1,21 +1,18 @@
-version: '3.7'
-#
 services:
   iris:
     depends_on:
       - iris-init
+      - webgateway
     build:
       context: ./build
       args:
         COMMIT_ID: ${COMMIT_ID}
     image: dpmeister/simple
-    hostname: myiris
+    hostname: iris
     command: --ISCAgent false --monitorCPF false
     ports:
     # superserver default port 
     - "1972:1972"
-    # webserver/management portal port
-    - "52773:52773"
 
     volumes:
     # ISC = InterSystems IRIS install dir
@@ -36,3 +33,18 @@ services:
     volumes:
     - ./external-vol-mgr:/iris-mgr
     - ./external-vol-db:/vol-data
+
+  webgateway:
+    image: containers.intersystems.com/intersystems/webgateway:2024.1
+    init: true
+    container_name: webgateway
+    hostname: webgateway
+    ports:
+    - "8882:80"
+    - "8883:443"
+    environment:
+    #- ISC_DATA_DIRECTORY=/webgateway-shared/durable
+    - ISC_CSP_CONF_FILE=/webgateway-shared/CSP.conf
+    - ISC_CSP_INI_FILE=/webgateway-shared/CSP.ini
+    volumes:
+    - ./webgateway:/webgateway-shared

@@ -4,4 +4,4 @@ if [ $# -eq 0 ]; then
 else
    ip=$1
 fi
-curl -s -H "Content-Type: application/json; charset=UTF-8" -H "Accept:application/json" "http://$ip:52773/csp/myapp/history" --user "appuser:sys" | python3 -mjson.tool
+curl -s -H "Content-Type: application/json; charset=UTF-8" -H "Accept:application/json" "http://$ip:8882/csp/myapp/history" --user "appuser:sys" | python3 -mjson.tool
