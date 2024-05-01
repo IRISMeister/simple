@@ -74,6 +74,8 @@ ClassMethod setup(ByRef tVars) As %Status
     Set tSC = ##Class(Security.Applications).Modify(webapp,.props)
     $$$ThrowOnError(tSC)
 
+    #; Do $System.CSP.SetConfig("CSPConfigName",$SYSTEM.INetInfo.LocalHostName())
+
     Set $NAMESPACE=oldns
 
   } Catch(e) {
