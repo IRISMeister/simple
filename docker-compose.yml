@@ -35,10 +35,17 @@ services:
     - ./external-vol-db:/vol-data
 
   webgateway:
-    image: containers.intersystems.com/intersystems/webgateway:2024.1
+    #image: containers.intersystems.com/intersystems/webgateway:2024.1
+    # docker compose log に不要なロギングが出力され続けるのを回避したいので以前のバージョンを使用する。
+    image: containers.intersystems.com/intersystems/webgateway:2023.2
     init: true
     container_name: webgateway
     hostname: webgateway
+    # 15秒間隔で出力され続ける下記メッセージを抑止するとされているオプションが2024.1時点で機能していない。
+    # 2023.2の使用に切り替えたことに伴いコメントアウト. 
+    # webgateway  | [INFO] Files /webgateway-shared/CSP.conf and /durable/webgateway/CSP.conf are the same; skipping copy
+    # webgateway  | [INFO] Files /webgateway-shared/CSP.ini and /durable/webgateway/CSP.ini.last_merge are the same; skipping merge
+    # command: --monitorConf false --monitorIni false
     ports:
     - "8882:80"
     - "8883:443"
@@ -46,5 +53,8 @@ services:
     #- ISC_DATA_DIRECTORY=/webgateway-shared/durable
     - ISC_CSP_CONF_FILE=/webgateway-shared/CSP.conf
     - ISC_CSP_INI_FILE=/webgateway-shared/CSP.ini
+    # TZ環境変数はloggingに対して効果が無い模様。タイムスタンプがUTCになる。
+    # 一応残しておく。 JSTが必要であればtzdataを使ったイメージをビルドする事。
+    - TZ=JST-9
     volumes:
     - ./webgateway:/webgateway-shared
