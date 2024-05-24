@@ -1,5 +1,4 @@
 #!/bin/bash 
-./build.sh
 docker compose -f docker-compose-unittest.yml up -d
 docker compose -f docker-compose-unittest.yml exec -T iris bash -c "\$ISC_PACKAGE_INSTALLDIR/dev/Cloud/ICM/waitISC.sh '' 60"
 docker compose ps

@@ -27,6 +27,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Build image
+        run: docker compose --progress plain build
+
       - name: Run tests
         run: |
           if [ -f unittest.sh ]; then
