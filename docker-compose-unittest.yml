@@ -18,15 +18,11 @@ services:
     - ISC_CPF_MERGE_FILE=/home/irisowner/cpf/merge.cpf
 
   webgateway:
-    image: containers.intersystems.com/intersystems/webgateway:2024.1
+    image: containers.intersystems.com/intersystems/webgateway:2023.2
     init: true
     container_name: webgateway
     hostname: webgateway
-    ports:
-    - "8882:80"
-    - "8883:443"
     environment:
-    #- ISC_DATA_DIRECTORY=/webgateway-shared/durable
     - ISC_CSP_CONF_FILE=/webgateway-shared/CSP.conf
     - ISC_CSP_INI_FILE=/webgateway-shared/CSP.ini
     volumes:
