@@ -56,6 +56,9 @@ $ sudo rm -fR external-vol-*/*
 
 If you want to generate skeleton classes from a given openapi spec, do the following.   
 Please make sure you have at least one IRIS user (such as SuperUser) enabled and then use it.
+
+Ediy your yaml. Use editor like https://editor.swagger.io/ to convert your yaml into json format.
+
 ```
 $ curl -H 'Content-Type: application/json' -d @swagger.json -u SuperUser:SYS http://localhost:8882/api/mgmnt/v2/myapp/MyApp
 ```

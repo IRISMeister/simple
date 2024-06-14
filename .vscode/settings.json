@@ -5,7 +5,7 @@
             "webServer": {
                 "scheme": "http",
                 "host": "localhost",
-                "port": 52873
+                "port": 8882
             },
             "username": "_SYSTEM",
             "password": "SYS"
