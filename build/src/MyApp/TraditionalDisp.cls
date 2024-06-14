@@ -23,6 +23,10 @@ ClassMethod PostRequest() As %Status
         #;Set ^deb($INCREMENT(^deb))=$LISTBUILD(%request.CharSet,%request.ContentType,%request.Content.CharSet,%request.Content.ContentType,%request.Content)
         //Bodyに含まれているJSON文字を取得しJSONダイナミックオブジェクトに変換する
         set body={}.%FromJSON(%request.Content)
+        #; 不要かもしれないが、Streamのタイプをチェックし、Binaryの場合は自分でUTF-8変換をかけている。
+        If %request.Content.%ClassName(1)="%CSP.BinaryStream" {        
+			Set jsonstr=$ZCVT(body.%ToJSON(),"I","UTF8"),body={}.%FromJSON(jsonstr) 
+        }
 		If $ISOBJECT(body) {
 			set Value=body.Value
 		}
