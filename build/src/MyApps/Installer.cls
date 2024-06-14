@@ -17,6 +17,7 @@ XData setup [ XMLNamespace = INSTALLER ]
     </Configuration>
 
     <CSPApplication Url="/csp/${Namespace}" Directory="${CSPDIR}${Namespace}" Resource=""/>
+    <CSPApplication Url="/csp/${Namespace}/traditional" Directory="${CSPDIR}${Namespace}" Resource=""/>
     <Import File="${SRCDIR}" Flags="ck" Recurse="true"/>
     <Invoke Class="MyApp.Utils" Method="Init" CheckStatus="1" Return="RetVal">
     </Invoke>
@@ -53,7 +54,7 @@ ClassMethod setup(ByRef tVars) As %Status
     New $NAMESPACE
     Set $NAMESPACE="%SYS"
 
-#If 1
+#If 0
     #; install ZPM (because I want to use UnitTest related utilities)
     Do ##class(Security.SSLConfigs).Create("z")
     Set r=##class(%Net.HttpRequest).%New(),r.Server="pm.community.intersystems.com",r.SSLConfiguration="z",r.Https=1
@@ -63,6 +64,7 @@ ClassMethod setup(ByRef tVars) As %Status
     $$$ThrowOnError(tSC)
 #EndIf
 
+    Kill props
     Set tSC = ##Class(Security.Applications).Get(webapp,.props)
     $$$ThrowOnError(tSC)
     Set props("DispatchClass")="MyApp.disp"
@@ -74,6 +76,18 @@ ClassMethod setup(ByRef tVars) As %Status
     Set tSC = ##Class(Security.Applications).Modify(webapp,.props)
     $$$ThrowOnError(tSC)
 
+    Kill props
+    Set tSC = ##Class(Security.Applications).Get(webapp_"/traditional",.props)
+    $$$ThrowOnError(tSC)
+    Set props("DispatchClass")="MyApp.TraditionalDisp"
+    Set props("Resource")=""
+    Set props("DeepSeeEnabled")=1
+    Set props("MatchRoles")=":%All"
+    Set props("NameSpace")=Namespace
+    Kill props("Type")
+    Set tSC = ##Class(Security.Applications).Modify(webapp_"/traditional",.props)
+    $$$ThrowOnError(tSC)
+
     Set $NAMESPACE=oldns
 
   } Catch(e) {
@@ -82,6 +96,7 @@ ClassMethod setup(ByRef tVars) As %Status
   }
   Return tSC
 }
+
 ClassMethod ConfigCSP() As %Status
 {
   New $NAMESPACE
@@ -95,4 +110,5 @@ ClassMethod ConfigCSP() As %Status
 	}
   Return tSC
 }
+
 }

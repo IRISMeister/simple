@@ -20,6 +20,7 @@ ClassMethod PostRequest() As %Status
     #dim ex As %Exception.AbstractException
     set status=$$$OK
     try {
+        #;Set ^deb($INCREMENT(^deb))=$LISTBUILD(%request.CharSet,%request.ContentType,%request.Content.CharSet,%request.Content.ContentType,%request.Content)
         //Bodyに含まれているJSON文字を取得しJSONダイナミックオブジェクトに変換する
         set body={}.%FromJSON(%request.Content)
 		If $ISOBJECT(body) {
