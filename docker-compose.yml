@@ -9,7 +9,9 @@ services:
         COMMIT_ID: ${COMMIT_ID}
     image: dpmeister/simple
     hostname: iris
-    command: --ISCAgent false --monitorCPF false
+    command: 
+      --ISCAgent false --monitorCPF false
+    #  --key /ISC/license/iris.key
     ports:
     # superserver default port 
     - "1972:1972"
@@ -20,6 +22,7 @@ services:
     - ./external-vol-db:/vol-data
     - ./cos:/home/irisowner/cos
     - ./UserCPF:/home/irisowner/cpf
+    #- ./:/ISC/license
 
     environment:
     - TZ=JST-9
@@ -35,7 +38,7 @@ services:
     - ./external-vol-db:/vol-data
 
   webgateway:
-    image: containers.intersystems.com/intersystems/webgateway:2024.2
+    image: irepo.intersystems.com/intersystems/webgateway:2025.1
     init: true
     container_name: webgateway
     hostname: webgateway

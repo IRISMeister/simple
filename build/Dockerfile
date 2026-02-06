@@ -1,4 +1,4 @@
-FROM containers.intersystems.com/intersystems/iris-community:2024.1
+FROM irepo.intersystems.com/intersystems/iris-community:2025.1
 
 ARG COMMIT_ID="unknown"
 
