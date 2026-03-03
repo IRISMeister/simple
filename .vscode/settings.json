@@ -14,6 +14,6 @@
     "objectscript.conn": {
         "server": "iris",
         "ns": "MYAPP",
-        "active": true
+        "active": false
     }
 }

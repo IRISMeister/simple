@@ -16,7 +16,7 @@ ClassMethod runSQL(ByRef tVars) As %Status
   Set rs=##class(%ResultSet).%New("%File:FileSet") 
   Do rs.Execute("/home/irisowner/sql","*.sql")
   While(rs.Next()) { 
-    Do $SYSTEM.SQL.Schema.ImportDDL(rs.Name,"/home/irisowner/import_Errors.log")
+    Do $SYSTEM.SQL.Schema.ImportDDL(rs.Name,"/home/irisowner/import_Errors_"_rs.ItemName_".log")
   }
   Return $$$OK
 }
