@@ -54,7 +54,7 @@ ClassMethod setup(ByRef tVars) As %Status
     New $NAMESPACE
     Set $NAMESPACE="%SYS"
 
-#If 0
+#If 1
     #; install ZPM (because I want to use UnitTest related utilities)
     Do ##class(Security.SSLConfigs).Create("z")
     Set r=##class(%Net.HttpRequest).%New(),r.Server="pm.community.intersystems.com",r.SSLConfiguration="z",r.Https=1
@@ -62,6 +62,8 @@ ClassMethod setup(ByRef tVars) As %Status
     $$$ThrowOnError(tSC)
     Set tSC=$system.OBJ.LoadStream(r.HttpResponse.Data,"c")
     $$$ThrowOnError(tSC)
+
+    zpm "enable -map -globally"
 #EndIf
 
     Kill props

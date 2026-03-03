@@ -8,13 +8,11 @@ services:
     command: --ISCAgent false --monitorCPF false
 
     volumes:
-    # ISC = InterSystems IRIS install dir
     - ./cos:/home/irisowner/cos
     - ./UserCPF:/home/irisowner/cpf
 
     environment:
     - TZ=JST-9
-    #; comment out this line to disable durable sys
     - ISC_CPF_MERGE_FILE=/home/irisowner/cpf/merge.cpf
 
   webgateway:
@@ -22,6 +20,10 @@ services:
     init: true
     container_name: webgateway
     hostname: webgateway
+    command: --monitorConf false --monitorIni false 
+    ports:
+    - "8882:80"
+    - "8883:443"
     environment:
     - ISC_CSP_CONF_FILE=/webgateway-shared/CSP.conf
     - ISC_CSP_INI_FILE=/webgateway-shared/CSP.ini

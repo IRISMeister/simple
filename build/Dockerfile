@@ -21,7 +21,9 @@ COPY --chown=$ISC_PACKAGE_IRISUSER:$ISC_PACKAGE_IRISGROUP src/UnitTest/ $UnitTes
 COPY --chown=$ISC_PACKAGE_IRISUSER:$ISC_PACKAGE_IRISGROUP sql/ $SQLDIR/
 COPY --chown=$ISC_PACKAGE_IRISUSER:$ISC_PACKAGE_IRISGROUP csv/ $CSVDIR/
 
-RUN  iris start $ISC_PACKAGE_INSTANCENAME \ 
+# uncomment if you need a license during build
+#RUN --mount=type=secret,id=mysecret,uid=51773,gid=51773,dst=/usr/irissys/mgr/iris.key  iris start $ISC_PACKAGE_INSTANCENAME \ 
+RUN iris start $ISC_PACKAGE_INSTANCENAME \ 
  && printf 'Do ##class(Config.NLS.Locales).Install("jpuw") h\n' | iris session $ISC_PACKAGE_INSTANCENAME -U %SYS \
  && printf 'Set tSC=$system.OBJ.Load("'$HOME/$SRCBASEDIR'/MyApps/Installer.cls","ck") Do:+tSC=0 $SYSTEM.Process.Terminate($JOB,1) h\n' | iris session $ISC_PACKAGE_INSTANCENAME \
  && printf 'Set tSC=##class(MyApps.Installer).setup() Do:+tSC=0 $SYSTEM.Process.Terminate($JOB,1) h\n' | iris session $ISC_PACKAGE_INSTANCENAME \

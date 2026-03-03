@@ -7,6 +7,9 @@ services:
       context: ./build
       args:
         COMMIT_ID: ${COMMIT_ID}
+      # uncomment if you need a license during build
+      #secrets:
+      #- mysecret        
     image: dpmeister/simple
     hostname: iris
     command: 
@@ -60,3 +63,8 @@ services:
     - TZ=JST-9
     volumes:
     - ./webgateway:/webgateway-shared
+
+# uncomment if you need a license during build
+#secrets:
+#  mysecret:
+#    file: ./iris.key
