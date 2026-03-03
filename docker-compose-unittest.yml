@@ -16,7 +16,7 @@ services:
     - ISC_CPF_MERGE_FILE=/home/irisowner/cpf/merge.cpf
 
   webgateway:
-    image: irepo.intersystems.com/intersystems/webgateway:2025.1
+    image: containers.intersystems.com/intersystems/webgateway:2025.1
     init: true
     container_name: webgateway
     hostname: webgateway

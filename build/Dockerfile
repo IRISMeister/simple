@@ -1,5 +1,4 @@
-FROM irepo.intersystems.com/intersystems/iris-community:2025.1
-
+FROM intersystems/iris-community:2025.1
 ARG COMMIT_ID="unknown"
 
 #USER root
